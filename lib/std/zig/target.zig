@@ -470,8 +470,8 @@ fn eqlIgnoreCase(ignore_case: bool, a: []const u8, b: []const u8) bool {
     }
 }
 
-pub fn intByteSize(target: *const std.Target, bits: u16) u19 {
-    return std.mem.alignForward(u19, @intCast((@as(u17, bits) + 7) / 8), intAlignment(target, bits));
+pub fn intByteSize(target: *const std.Target, bits: u16) usize {
+    return @intCast(std.mem.alignForward(u19, @intCast((@as(u17, bits) + 7) / 8), intAlignment(target, bits)));
 }
 
 pub fn intAlignment(target: *const std.Target, bits: u16) u16 {

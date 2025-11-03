@@ -82,10 +82,10 @@ pub inline fn bigIntFromFloat(comptime signedness: std.builtin.Signedness, resul
     switch (signedness) {
         .signed => {
             const endian = @import("builtin").cpu.arch.endian();
-            const exponent_limb = switch (endian) {
+            const exponent_limb: usize = @intCast(switch (endian) {
                 .little => exponent / 32,
                 .big => result.len - 1 - exponent / 32,
-            };
+            });
             const sign_bits: u32 = if (int < 0) math.maxInt(u32) else 0;
             @memset(result[0..exponent_limb], switch (endian) {
                 .little => 0,
@@ -99,7 +99,7 @@ pub inline fn bigIntFromFloat(comptime signedness: std.builtin.Signedness, resul
         },
         .unsigned => @memset(result, 0),
     }
-    std.mem.writePackedIntNative(I, std.mem.sliceAsBytes(result), exponent, int);
+    std.mem.writePackedIntNative(I, std.mem.sliceAsBytes(result), @intCast(exponent), int);
 }
 
 test {
